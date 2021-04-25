@@ -21,7 +21,9 @@ public class RoomValueProvider extends ValueProviderSupport {
     }
 
     @Override
-    public List<CompletionProposal> complete(MethodParameter methodParameter, CompletionContext completionContext, String[] strings) {
+    public List<CompletionProposal> complete(MethodParameter methodParameter,
+                                             CompletionContext completionContext,
+                                             String[] strings) {
         String currentInput = completionContext.currentWordUpToCursor();
         return this.roomService.findByName(currentInput)
                 .stream()
