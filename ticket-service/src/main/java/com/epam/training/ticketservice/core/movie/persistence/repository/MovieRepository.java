@@ -1,6 +1,6 @@
-package com.epam.training.ticketservice.repository;
+package com.epam.training.ticketservice.core.movie.persistence.repository;
 
-import com.epam.training.ticketservice.model.Movie;
+import com.epam.training.ticketservice.core.movie.persistence.entity.Movie;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

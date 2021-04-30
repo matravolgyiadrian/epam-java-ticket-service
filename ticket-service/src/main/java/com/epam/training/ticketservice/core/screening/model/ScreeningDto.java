@@ -1,5 +1,7 @@
-package com.epam.training.ticketservice.model;
+package com.epam.training.ticketservice.core.screening.model;
 
+import com.epam.training.ticketservice.core.movie.persistence.entity.Movie;
+import com.epam.training.ticketservice.core.room.persistence.entity.Room;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,7 +12,7 @@ import java.time.format.DateTimeFormatter;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ScreeningObject {
+public class ScreeningDto {
     private Movie movie;
     private Room room;
     private LocalDateTime start;

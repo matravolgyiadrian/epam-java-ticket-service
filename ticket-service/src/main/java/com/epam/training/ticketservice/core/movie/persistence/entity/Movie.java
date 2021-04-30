@@ -1,4 +1,4 @@
-package com.epam.training.ticketservice.model;
+package com.epam.training.ticketservice.core.movie.persistence.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,11 +20,7 @@ public class Movie {
 
     @Id
     String title;
-
-    @Column(nullable = false)
     String genre;
-
-    @Column(nullable = false)
     int length;
 
     public String toString() {

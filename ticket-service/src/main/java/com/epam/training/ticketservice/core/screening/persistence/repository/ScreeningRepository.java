@@ -1,7 +1,7 @@
-package com.epam.training.ticketservice.repository;
+package com.epam.training.ticketservice.core.screening.persistence.repository;
 
-import com.epam.training.ticketservice.model.Screening;
-import com.epam.training.ticketservice.util.ScreeningCompositeKey;
+import com.epam.training.ticketservice.core.screening.persistence.entity.Screening;
+import com.epam.training.ticketservice.core.screening.persistence.entity.ScreeningCompositeKey;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

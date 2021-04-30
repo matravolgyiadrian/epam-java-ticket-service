@@ -1,6 +1,6 @@
-package com.epam.training.ticketservice.repository;
+package com.epam.training.ticketservice.core.user.persistence.repository;
 
-import com.epam.training.ticketservice.model.User;
+import com.epam.training.ticketservice.core.user.persistence.entity.User;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 

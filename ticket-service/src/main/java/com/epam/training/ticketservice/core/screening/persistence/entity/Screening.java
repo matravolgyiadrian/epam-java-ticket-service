@@ -1,6 +1,5 @@
-package com.epam.training.ticketservice.model;
+package com.epam.training.ticketservice.core.screening.persistence.entity;
 
-import com.epam.training.ticketservice.util.ScreeningCompositeKey;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

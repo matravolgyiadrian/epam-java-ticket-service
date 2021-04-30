@@ -1,7 +1,7 @@
 package com.epam.training.ticketservice.ui;
 
-import com.epam.training.ticketservice.service.ScreeningService;
-import com.epam.training.ticketservice.service.UserService;
+import com.epam.training.ticketservice.core.screening.impl.ScreeningServiceImpl;
+import com.epam.training.ticketservice.core.user.impl.UserServiceImpl;
 import com.epam.training.ticketservice.ui.valueproviders.MovieValueProvider;
 import com.epam.training.ticketservice.ui.valueproviders.RoomValueProvider;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,11 +14,11 @@ import org.springframework.shell.standard.ShellOption;
 @ShellComponent
 public class ScreeningCommands {
 
-    private final ScreeningService screeningService;
-    private final UserService userService;
+    private final ScreeningServiceImpl screeningService;
+    private final UserServiceImpl userService;
 
     @Autowired
-    public ScreeningCommands(ScreeningService screeningService, UserService userService) {
+    public ScreeningCommands(ScreeningServiceImpl screeningService, UserServiceImpl userService) {
         this.screeningService = screeningService;
         this.userService = userService;
     }

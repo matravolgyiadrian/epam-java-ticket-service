@@ -1,13 +1,15 @@
-package com.epam.training.ticketservice.service;
+package com.epam.training.ticketservice.core.screening.impl;
 
-import com.epam.training.ticketservice.model.Movie;
-import com.epam.training.ticketservice.model.Room;
-import com.epam.training.ticketservice.model.Screening;
-import com.epam.training.ticketservice.model.ScreeningObject;
-import com.epam.training.ticketservice.repository.MovieRepository;
-import com.epam.training.ticketservice.repository.RoomRepository;
-import com.epam.training.ticketservice.repository.ScreeningRepository;
-import com.epam.training.ticketservice.util.ScreeningCompositeKey;
+import com.epam.training.ticketservice.core.movie.persistence.entity.Movie;
+import com.epam.training.ticketservice.core.room.persistence.entity.Room;
+import com.epam.training.ticketservice.core.screening.ScreeningService;
+import com.epam.training.ticketservice.core.screening.persistence.entity.Screening;
+import com.epam.training.ticketservice.core.screening.model.ScreeningDto;
+import com.epam.training.ticketservice.core.movie.persistence.repository.MovieRepository;
+import com.epam.training.ticketservice.core.room.persistence.repository.RoomRepository;
+import com.epam.training.ticketservice.core.screening.persistence.repository.ScreeningRepository;
+import com.epam.training.ticketservice.core.util.ConsoleService;
+import com.epam.training.ticketservice.core.screening.persistence.entity.ScreeningCompositeKey;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,7 +24,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
-public class ScreeningService {
+public class ScreeningServiceImpl implements ScreeningService {
 
     private final ScreeningRepository screeningRepository;
     private final RoomRepository roomRepository;
@@ -30,9 +32,9 @@ public class ScreeningService {
     private final ConsoleService console;
 
     @Autowired
-    public ScreeningService(ScreeningRepository screeningRepository,
-                            RoomRepository roomRepository,
-                            MovieRepository movieRepository, ConsoleService console) {
+    public ScreeningServiceImpl(ScreeningRepository screeningRepository,
+                                RoomRepository roomRepository,
+                                MovieRepository movieRepository, ConsoleService console) {
         this.screeningRepository = screeningRepository;
         this.roomRepository = roomRepository;
         this.movieRepository = movieRepository;
@@ -40,13 +42,14 @@ public class ScreeningService {
     }
 
 
+    @Override
     public void listAll() {
         if (screeningRepository.findAll().isEmpty()) {
             console.printError("There are no screenings");
         } else {
             screeningRepository.findAll()
                     .stream()
-                    .map(screening -> new ScreeningObject(
+                    .map(screening -> new ScreeningDto(
                             movieRepository.findById(screening.getMovieTitle()).get(),
                             roomRepository.findById(screening.getRoomName()).get(),
                             screening.getStartTime()
@@ -55,6 +58,7 @@ public class ScreeningService {
         }
     }
 
+    @Override
     public void create(String movieTitle, String roomName, String start) {
         try {
             Movie movie = movieRepository.findById(movieTitle)
@@ -76,6 +80,7 @@ public class ScreeningService {
         }
     }
 
+    @Override
     public void delete(String movieTitle, String roomName, String start) {
         try {
             LocalDateTime startTime = convertStringToLocalDateTime(start);
@@ -95,7 +100,7 @@ public class ScreeningService {
     }
 
     private void saveScreening(Movie movie, Room room, LocalDateTime startTime) {
-        List<ScreeningObject> screenings = getFilteredScreeningObjects(room.getName(), startTime);
+        List<ScreeningDto> screenings = getFilteredScreeningObjects(room.getName(), startTime);
         String overlapStatus = getOverlapStatus(screenings, movie, startTime);
 
         if (overlapStatus != null) {
@@ -109,8 +114,8 @@ public class ScreeningService {
         }
     }
 
-    private String getOverlapStatus(List<ScreeningObject> list, Movie movie, LocalDateTime startTime) {
-        for (ScreeningObject screening : list) {
+    private String getOverlapStatus(List<ScreeningDto> list, Movie movie, LocalDateTime startTime) {
+        for (ScreeningDto screening : list) {
             LocalTime startA = startTime.toLocalTime();
             LocalTime startB = screening.getStart().toLocalTime();
             LocalTime stopA = startTime.plusMinutes(movie.getLength()).toLocalTime();
@@ -128,14 +133,14 @@ public class ScreeningService {
         return null;
     }
 
-    private List<ScreeningObject> getFilteredScreeningObjects(String roomName, LocalDateTime startTime) {
+    private List<ScreeningDto> getFilteredScreeningObjects(String roomName, LocalDateTime startTime) {
         return screeningRepository.findAll()
                 .stream()
                 .filter(screening -> screening.getStartTime().getYear() == startTime.getYear()
                         && screening.getStartTime().getMonthValue() == startTime.getMonthValue()
                         && screening.getStartTime().getDayOfMonth() == startTime.getDayOfMonth()
                         && screening.getRoomName().equals(roomName))
-                .map(screening -> new ScreeningObject(
+                .map(screening -> new ScreeningDto(
                         movieRepository.findById(screening.getMovieTitle()).get(),
                         roomRepository.findById(screening.getRoomName()).get(),
                         screening.getStartTime()))

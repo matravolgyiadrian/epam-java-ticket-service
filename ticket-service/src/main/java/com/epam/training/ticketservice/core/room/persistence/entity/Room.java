@@ -1,4 +1,4 @@
-package com.epam.training.ticketservice.model;
+package com.epam.training.ticketservice.core.room.persistence.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -20,11 +20,7 @@ public class Room {
 
     @Id
     String name;
-
-    @Column(nullable = false)
     int rows;
-
-    @Column(nullable = false)
     int columns;
 
     public int getNumberOfSeats() {

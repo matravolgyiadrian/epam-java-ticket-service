@@ -1,7 +1,8 @@
-package com.epam.training.ticketservice.util;
+package com.epam.training.ticketservice.core.configuration;
 
-import com.epam.training.ticketservice.model.User;
-import com.epam.training.ticketservice.repository.UserRepository;
+import com.epam.training.ticketservice.core.user.persistence.entity.User;
+import com.epam.training.ticketservice.core.user.persistence.repository.UserRepository;
+import com.epam.training.ticketservice.core.user.persistence.entity.AccountType;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;

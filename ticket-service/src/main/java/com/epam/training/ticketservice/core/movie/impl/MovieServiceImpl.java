@@ -1,7 +1,9 @@
-package com.epam.training.ticketservice.service;
+package com.epam.training.ticketservice.core.movie.impl;
 
-import com.epam.training.ticketservice.model.Movie;
-import com.epam.training.ticketservice.repository.MovieRepository;
+import com.epam.training.ticketservice.core.movie.MovieService;
+import com.epam.training.ticketservice.core.movie.persistence.entity.Movie;
+import com.epam.training.ticketservice.core.movie.persistence.repository.MovieRepository;
+import com.epam.training.ticketservice.core.util.ConsoleService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -12,16 +14,17 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
-public class MovieService {
+public class MovieServiceImpl implements MovieService {
     private final MovieRepository movieRepository;
     private final ConsoleService console;
 
     @Autowired
-    public MovieService(MovieRepository movieRepository, ConsoleService consoleService) {
+    public MovieServiceImpl(MovieRepository movieRepository, ConsoleService consoleService) {
         this.movieRepository = movieRepository;
         this.console = consoleService;
     }
 
+    @Override
     public void listAll() {
         List<Movie> movies = movieRepository.findAll();
         if (movies.isEmpty()) {
@@ -34,6 +37,7 @@ public class MovieService {
 
     }
 
+    @Override
     public void create(String title, String genre, int length) {
         if (movieRepository.findById(title).isPresent()) {
             console.printError("This movie is already in our database.");
@@ -49,6 +53,7 @@ public class MovieService {
         }
     }
 
+    @Override
     public void update(String title, String genre, int length) {
         if (movieRepository.findById(title).isEmpty()) {
             console.printError("There is no movie with title: %s", title);
@@ -64,6 +69,7 @@ public class MovieService {
         }
     }
 
+    @Override
     public void delete(String title) {
         if (movieRepository.findById(title).isPresent()) {
             movieRepository.deleteById(title);
@@ -74,6 +80,7 @@ public class MovieService {
         }
     }
 
+    @Override
     public Collection<Movie> findByTitle(String title) {
         return this.movieRepository.findAll()
                 .stream()

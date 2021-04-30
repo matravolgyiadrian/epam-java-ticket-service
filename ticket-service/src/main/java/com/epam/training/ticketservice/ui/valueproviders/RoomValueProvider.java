@@ -1,7 +1,7 @@
 package com.epam.training.ticketservice.ui.valueproviders;
 
-import com.epam.training.ticketservice.model.Room;
-import com.epam.training.ticketservice.service.RoomService;
+import com.epam.training.ticketservice.core.room.persistence.entity.Room;
+import com.epam.training.ticketservice.core.room.impl.RoomServiceImpl;
 import org.springframework.core.MethodParameter;
 import org.springframework.shell.CompletionContext;
 import org.springframework.shell.CompletionProposal;
@@ -14,9 +14,9 @@ import java.util.stream.Collectors;
 @Component
 public class RoomValueProvider extends ValueProviderSupport {
 
-    private final RoomService roomService;
+    private final RoomServiceImpl roomService;
 
-    public RoomValueProvider(RoomService roomService) {
+    public RoomValueProvider(RoomServiceImpl roomService) {
         this.roomService = roomService;
     }
 

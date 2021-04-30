@@ -1,15 +1,11 @@
-package com.epam.training.ticketservice.model;
+package com.epam.training.ticketservice.core.user.persistence.entity;
 
-import com.epam.training.ticketservice.util.AccountType;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Data
 @Entity
@@ -18,12 +14,11 @@ import javax.persistence.Table;
 @NoArgsConstructor
 @AllArgsConstructor
 public class User {
+
     @Id
     String username;
-
-    @Column(nullable = false)
     String password;
 
-    @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     AccountType type;
 }
