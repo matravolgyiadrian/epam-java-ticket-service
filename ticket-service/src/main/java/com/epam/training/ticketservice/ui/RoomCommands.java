@@ -47,7 +47,7 @@ public class RoomCommands {
 
     @ShellMethodAvailability({"create room", "update room", "delete room"})
     public Availability isSignedIn() {
-        return userService.isSignedIn()
+        return userService.isAdmin()
                 ? Availability.available()
                 : Availability.unavailable("you have to be signed in as a privileged user.");
     }

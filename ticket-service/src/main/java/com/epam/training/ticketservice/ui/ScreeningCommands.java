@@ -43,7 +43,7 @@ public class ScreeningCommands {
 
     @ShellMethodAvailability({"create screening", "delete screening"})
     public Availability isSignedIn() {
-        return userService.isSignedIn()
+        return userService.isAdmin()
                 ? Availability.available()
                 : Availability.unavailable("you have to be signed in as a privileged user.");
     }

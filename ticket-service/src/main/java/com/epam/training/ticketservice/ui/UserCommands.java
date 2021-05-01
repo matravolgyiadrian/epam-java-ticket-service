@@ -16,13 +16,21 @@ public class UserCommands {
         this.userService = userService;
     }
 
-    @ShellMethodAvailability("signedInAvailability")
-    @ShellMethod(value = "Sign in to the ticket service system.", key = "sign in privileged")
-    public void signInAsAdmin(String username, String password) {
-        userService.signIn(username, password);
+    @ShellMethod(value = "Sign up an account.", key = "sign up")
+    public void signUp(String username, String password) {
+        userService.signUp(username, password);
     }
 
-    @ShellMethodAvailability("signedOutAvailability")
+    @ShellMethod(value = "Sign in as a privileged user.", key = "sign in privileged")
+    public void signInAsAdmin(String username, String password) {
+        userService.signIn(username, password, true);
+    }
+
+    @ShellMethod(value = "Sign in a user.", key = "sign in")
+    public void signInAsUser(String username, String password) {
+        userService.signIn(username, password, false);
+    }
+
     @ShellMethod(value = "Sign out from the ticket service system.", key = "sign out")
     public void signOut() {
         userService.signOut();
@@ -34,15 +42,17 @@ public class UserCommands {
     }
 
 
-    public Availability signedOutAvailability() {
-        return userService.isSignedIn()
-                ? Availability.available()
-                : Availability.unavailable("you have to be signed in to use this command.");
-    }
-
+    @ShellMethodAvailability({"sign in", "sign in privileged", "sign up"})
     public Availability signedInAvailability() {
         return !userService.isSignedIn()
                 ? Availability.available()
                 : Availability.unavailable("you are already signed in.");
+    }
+
+    @ShellMethodAvailability("sign out")
+    public Availability signedOutAvailability() {
+        return userService.isSignedIn()
+                ? Availability.available()
+                : Availability.unavailable("you have to be signed in to use this command.");
     }
 }

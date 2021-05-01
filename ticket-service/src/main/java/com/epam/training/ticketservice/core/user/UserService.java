@@ -7,7 +7,11 @@ import java.util.List;
 public interface UserService {
     boolean isSignedIn();
 
-    void signIn(String username, String password);
+    boolean isAdmin();
+
+    void signUp(String username, String password);
+
+    void signIn(String username, String password, boolean isAdmin);
 
     void signOut();
 
