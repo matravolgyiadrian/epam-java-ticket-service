@@ -66,7 +66,9 @@ public class BookingServiceImpl implements BookingService {
                     .seats(seats)
                     .build());
 
-
+            console.print("Seats booked: %s; the price for this booking is %s HUF",
+                    seats.toString().replace("[", "").replace("]", ""),
+                    String.valueOf(seats.size()*1500));
         } catch (Exception e) {
             console.printError(e.getMessage());
         }

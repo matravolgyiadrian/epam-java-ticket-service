@@ -38,7 +38,7 @@ public class Booking {
 
     @Override
     public String toString() {
-        return String.format("Seats%s on %s in room %s starting at %s for %d HUF",
+        return String.format("Seats %s on %s in room %s starting at %s for %d HUF",
                 seats.toString().replace("[", "").replace("]", ""),
                 screening.getMovieTitle(), screening.getRoomName(),
                 screening.getStartTime().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")), seats.size() * 1500);
