@@ -96,6 +96,32 @@ public class ScreeningServiceImpl implements ScreeningService {
         }
     }
 
+    @Override
+    public ScreeningDto convertToScreeningDto(Screening screening) {
+        return ScreeningDto.builder()
+                .movie(screening.getMovie())
+                .room(screening.getRoom())
+                .start(screening.getId().getStartTime())
+                .build();
+    }
+
+    @Override
+    public ScreeningDto convertToScreeningDto(String movieTitle, String roomName, String start)
+            throws NoSuchElementException {
+        Movie movie = movieRepository.findById(movieTitle)
+                .orElseThrow(() -> new NoSuchElementException("The movie " + movieTitle + " doesn't exists"));
+        Room room = roomRepository.findById(roomName)
+                .orElseThrow(() -> new NoSuchElementException("The room " + roomName + " doesn't exists"));
+        LocalDateTime startTime = convertStringToLocalDateTime(start);
+
+        return ScreeningDto.builder()
+                .movie(movie)
+                .room(room)
+                .start(startTime)
+                .build();
+    }
+
+
     private void saveScreening(Movie movie, Room room, LocalDateTime startTime) {
         List<ScreeningDto> screenings = getFilteredScreeningObjects(room.getName(), startTime);
         String overlapStatus = getOverlapStatus(screenings, movie, startTime);
