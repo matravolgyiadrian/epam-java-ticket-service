@@ -1,5 +1,6 @@
 package com.epam.training.ticketservice.core.user.impl;
 
+import com.epam.training.ticketservice.core.booking.persistence.repository.BookingRepository;
 import com.epam.training.ticketservice.core.user.UserService;
 import com.epam.training.ticketservice.core.user.persistence.entity.User;
 import com.epam.training.ticketservice.core.user.persistence.repository.UserRepository;
@@ -19,6 +20,7 @@ import java.util.stream.Collectors;
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
     private final ConsoleService console;
+    private final BookingRepository bookingRepository;
 
     private final AtomicBoolean signedIn = new AtomicBoolean();
     private final AtomicBoolean isAdmin = new AtomicBoolean();
@@ -26,9 +28,10 @@ public class UserServiceImpl implements UserService {
     private String loggedInUser;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, ConsoleService console) {
+    public UserServiceImpl(UserRepository userRepository, ConsoleService console, BookingRepository bookingRepository) {
         this.userRepository = userRepository;
         this.console = console;
+        this.bookingRepository = bookingRepository;
     }
 
     @Override
@@ -51,7 +54,7 @@ public class UserServiceImpl implements UserService {
                     .type(AccountType.USER)
                     .build());
 
-        } catch (InstanceAlreadyExistsException e){
+        } catch (InstanceAlreadyExistsException e) {
             console.printError(e.getMessage());
         }
 
@@ -92,14 +95,21 @@ public class UserServiceImpl implements UserService {
     public void describe() {
         if (signedIn.get()) {
 
-            if(isAdmin.get()){
+            if (isAdmin.get()) {
                 console.print("Signed in with privileged account '%s'", this.loggedInUser);
-            } else{
-                console.print("Signed in with account");
+                console.print("%s", listAllByLoggedInUser());
+            } else {
+                console.print("Signed in with account '%s'", this.loggedInUser);
+                console.print("%s", listAllByLoggedInUser());
             }
         } else {
             console.printError("Your are not signed in");
         }
+    }
+
+    @Override
+    public String getLoggedInUser() {
+        return loggedInUser;
     }
 
     private List<User> findAllAdminUser() {
@@ -122,6 +132,17 @@ public class UserServiceImpl implements UserService {
                 .anyMatch(user -> user.getUsername().equals(username));
         if (isTaken) {
             throw new InstanceAlreadyExistsException("This username is already taken.");
+        }
+    }
+
+    private String listAllByLoggedInUser() {
+        if (bookingRepository.findByUsername(loggedInUser).isEmpty()) {
+            return "You have not booked any tickets yet";
+        } else {
+            StringBuilder sb = new StringBuilder();
+            bookingRepository.findByUsername(loggedInUser)
+                    .forEach(booking -> sb.append(booking.toString()).append("\n"));
+            return sb.toString();
         }
     }
 }

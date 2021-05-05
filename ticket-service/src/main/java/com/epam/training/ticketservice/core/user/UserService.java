@@ -16,4 +16,6 @@ public interface UserService {
     void signOut();
 
     void describe();
+
+    String getLoggedInUser();
 }
