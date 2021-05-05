@@ -3,6 +3,7 @@ package com.epam.training.ticketservice.core.screening.model;
 import com.epam.training.ticketservice.core.movie.persistence.entity.Movie;
 import com.epam.training.ticketservice.core.room.persistence.entity.Room;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -10,6 +11,7 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 @Data
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class ScreeningDto {
