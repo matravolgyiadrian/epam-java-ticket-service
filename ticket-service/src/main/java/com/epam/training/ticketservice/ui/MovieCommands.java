@@ -47,7 +47,7 @@ public class MovieCommands {
 
 
     @ShellMethodAvailability({"create movie", "update movie", "delete movie"})
-    public Availability isSignedIn() {
+    public Availability isAdmin() {
         return userService.isAdmin()
                 ? Availability.available()
                 : Availability.unavailable("you have to be signed in as a privileged user.");
