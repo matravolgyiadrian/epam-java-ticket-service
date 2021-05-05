@@ -1,7 +1,6 @@
 package com.epam.training.ticketservice.core.booking;
 
-import java.util.List;
 
 public interface BookingService {
-    void create(List<String> args);
+    void create(String movieTitle, String roomName, String start, String seatsString);
 }

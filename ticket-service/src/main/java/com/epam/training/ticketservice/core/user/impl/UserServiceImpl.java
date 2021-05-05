@@ -139,9 +139,9 @@ public class UserServiceImpl implements UserService {
         if (bookingRepository.findByUsername(loggedInUser).isEmpty()) {
             return "You have not booked any tickets yet";
         } else {
-            StringBuilder sb = new StringBuilder("Your previous booking are \n");
+            StringBuilder sb = new StringBuilder("Your previous booking are");
             bookingRepository.findByUsername(loggedInUser)
-                    .forEach(booking -> sb.append(booking.toString()).append("\n"));
+                    .forEach(booking -> sb.append("\n").append(booking.toString()));
             return sb.toString();
         }
     }

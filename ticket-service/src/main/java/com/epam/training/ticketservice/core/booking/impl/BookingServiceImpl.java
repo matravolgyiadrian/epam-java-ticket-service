@@ -8,7 +8,6 @@ import com.epam.training.ticketservice.core.room.persistence.entity.Room;
 import com.epam.training.ticketservice.core.screening.ScreeningService;
 import com.epam.training.ticketservice.core.screening.model.ScreeningDto;
 import com.epam.training.ticketservice.core.screening.persistence.entity.ScreeningID;
-import com.epam.training.ticketservice.core.screening.persistence.repository.ScreeningRepository;
 import com.epam.training.ticketservice.core.user.UserService;
 import com.epam.training.ticketservice.core.util.ConsoleService;
 import org.springframework.stereotype.Service;
@@ -18,9 +17,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 
 @Service
@@ -42,21 +38,14 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
-    public void create(List<String> args) {
+    public void create(String movieTitle, String roomName, String start, String seatsString) {
         try {
-            String movieTitle = args.get(0);
-            String roomName = args.get(1);
-            String start = args.get(2);
             ScreeningDto screening = screeningService.convertToScreeningDto(movieTitle, roomName, start);
-            if (args.size() < 3) {
-                throw new IllegalArgumentException("You have to follow this format: "
-                        + "book <movie title> <room name> <seats (row, column) separated by spaces>");
-            }
-            if (args.size() == 3) {
+            if (seatsString.isEmpty()) {
                 throw new IllegalArgumentException("You have to book at least one seat.");
             }
 
-            Set<Seat> seats = getSeatsForScreening(screening, args);
+            Set<Seat> seats = getSeatsForScreening(screening, seatsString);
 
             ScreeningID screeningID = new ScreeningID(movieTitle, roomName, screening.getStart());
             checkTakenSeats(screeningID, screening.getRoom(), seats);
@@ -74,11 +63,10 @@ public class BookingServiceImpl implements BookingService {
         }
     }
 
-    private Set<Seat> getSeatsForScreening(ScreeningDto screening, List<String> args){
+    private Set<Seat> getSeatsForScreening(ScreeningDto screening, String seatsString){
         Set<Seat> seats = new HashSet<>();
 
-        for (int i = 3; i < args.size(); i++) {
-            String temp = args.get(i);
+        for (String temp: seatsString.split(" ")) {
             Seat seat = convertToSeat(temp);
 
             if (seat.getSeatRow() < 1 || seat.getSeatRow() > screening.getRoom().getRows()
@@ -91,13 +79,12 @@ public class BookingServiceImpl implements BookingService {
     }
 
     private Seat convertToSeat(String temp) {
-        Pattern pattern = Pattern.compile("\\((\\d+), (\\d+)\\)");
-        Matcher matcher = pattern.matcher(temp);
-        if (!matcher.matches()) {
-            throw new IllegalArgumentException("You have to specify seats in the format of (<row>, <column>)");
+        String[] numbers = temp.split(",");
+        if (numbers.length != 2) {
+            throw new IllegalArgumentException("You have to specify seats in the format of \"<row>,<column>\"");
         }
-        int row = Integer.parseInt(matcher.group(1));
-        int column = Integer.parseInt(matcher.group(2));
+        int row = Integer.parseInt(numbers[0]);
+        int column = Integer.parseInt(numbers[1]);
 
         return Seat.builder()
                 .seatRow(row)
