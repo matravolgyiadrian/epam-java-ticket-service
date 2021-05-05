@@ -57,16 +57,16 @@ public class BookingServiceImpl implements BookingService {
 
             console.print("Seats booked: %s; the price for this booking is %s HUF",
                     seats.toString().replace("[", "").replace("]", ""),
-                    String.valueOf(seats.size()*1500));
+                    String.valueOf(seats.size() * 1500));
         } catch (Exception e) {
             console.printError(e.getMessage());
         }
     }
 
-    private Set<Seat> getSeatsForScreening(ScreeningDto screening, String seatsString){
+    private Set<Seat> getSeatsForScreening(ScreeningDto screening, String seatsString) {
         Set<Seat> seats = new HashSet<>();
 
-        for (String temp: seatsString.split(" ")) {
+        for (String temp : seatsString.split(" ")) {
             Seat seat = convertToSeat(temp);
 
             if (seat.getSeatRow() < 1 || seat.getSeatRow() > screening.getRoom().getRows()
