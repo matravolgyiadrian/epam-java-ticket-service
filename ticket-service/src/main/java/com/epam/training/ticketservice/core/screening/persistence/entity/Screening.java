@@ -1,32 +1,35 @@
 package com.epam.training.ticketservice.core.screening.persistence.entity;
 
+import com.epam.training.ticketservice.core.movie.persistence.entity.Movie;
+import com.epam.training.ticketservice.core.room.persistence.entity.Room;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.IdClass;
+import javax.persistence.ManyToOne;
+import javax.persistence.MapsId;
 import javax.persistence.Table;
-import java.time.LocalDateTime;
+
 
 @Data
 @Entity
 @Table(name = "screenings")
-@IdClass(ScreeningCompositeKey.class)
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class Screening {
 
-    @Id
-    private String movieTitle;
+    @EmbeddedId
+    private ScreeningID id;
 
-    @Id
-    private String roomName;
+    @ManyToOne
+    @MapsId("movieTitle")
+    private Movie movie;
 
-    @Id
-    private LocalDateTime startTime;
-
+    @ManyToOne
+    @MapsId("roomName")
+    private Room room;
 }

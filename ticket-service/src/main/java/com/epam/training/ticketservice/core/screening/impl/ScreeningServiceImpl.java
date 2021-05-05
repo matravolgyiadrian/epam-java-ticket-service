@@ -9,7 +9,7 @@ import com.epam.training.ticketservice.core.movie.persistence.repository.MovieRe
 import com.epam.training.ticketservice.core.room.persistence.repository.RoomRepository;
 import com.epam.training.ticketservice.core.screening.persistence.repository.ScreeningRepository;
 import com.epam.training.ticketservice.core.util.ConsoleService;
-import com.epam.training.ticketservice.core.screening.persistence.entity.ScreeningCompositeKey;
+import com.epam.training.ticketservice.core.screening.persistence.entity.ScreeningID;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -49,11 +49,8 @@ public class ScreeningServiceImpl implements ScreeningService {
         } else {
             screeningRepository.findAll()
                     .stream()
-                    .map(screening -> new ScreeningDto(
-                            movieRepository.findById(screening.getMovieTitle()).get(),
-                            roomRepository.findById(screening.getRoomName()).get(),
-                            screening.getStartTime()
-                    ).toString())
+                    .map(this::convertToScreeningDto)
+                    .map(ScreeningDto::toString)
                     .forEach(console::print);
         }
     }
@@ -67,7 +64,7 @@ public class ScreeningServiceImpl implements ScreeningService {
                     .orElseThrow(() -> new NoSuchElementException("The room " + roomName + " doesn't exists"));
             LocalDateTime startTime = convertStringToLocalDateTime(start);
 
-            if (screeningRepository.findById(new ScreeningCompositeKey(movieTitle, roomName, startTime)).isPresent()) {
+            if (screeningRepository.findById(new ScreeningID(movieTitle, roomName, startTime)).isPresent()) {
                 throw new InstanceAlreadyExistsException("This screening is already exists");
             }
 
@@ -84,7 +81,7 @@ public class ScreeningServiceImpl implements ScreeningService {
     public void delete(String movieTitle, String roomName, String start) {
         try {
             LocalDateTime startTime = convertStringToLocalDateTime(start);
-            ScreeningCompositeKey key = new ScreeningCompositeKey(movieTitle, roomName, startTime);
+            ScreeningID key = new ScreeningID(movieTitle, roomName, startTime);
             if (screeningRepository.findById(key).isPresent()) {
                 screeningRepository.deleteById(key);
 
@@ -107,9 +104,9 @@ public class ScreeningServiceImpl implements ScreeningService {
             console.printError(overlapStatus);
         } else {
             screeningRepository.save(Screening.builder()
-                    .movieTitle(movie.getTitle())
-                    .roomName(room.getName())
-                    .startTime(startTime)
+                    .id(new ScreeningID(movie.getTitle(), room.getName(), startTime))
+                    .movie(movie)
+                    .room(room)
                     .build());
         }
     }
@@ -136,14 +133,11 @@ public class ScreeningServiceImpl implements ScreeningService {
     private List<ScreeningDto> getFilteredScreeningObjects(String roomName, LocalDateTime startTime) {
         return screeningRepository.findAll()
                 .stream()
-                .filter(screening -> screening.getStartTime().getYear() == startTime.getYear()
-                        && screening.getStartTime().getMonthValue() == startTime.getMonthValue()
-                        && screening.getStartTime().getDayOfMonth() == startTime.getDayOfMonth()
-                        && screening.getRoomName().equals(roomName))
-                .map(screening -> new ScreeningDto(
-                        movieRepository.findById(screening.getMovieTitle()).get(),
-                        roomRepository.findById(screening.getRoomName()).get(),
-                        screening.getStartTime()))
+                .filter(screening -> screening.getId().getStartTime().getYear() == startTime.getYear()
+                        && screening.getId().getStartTime().getMonthValue() == startTime.getMonthValue()
+                        && screening.getId().getStartTime().getDayOfMonth() == startTime.getDayOfMonth()
+                        && screening.getId().getRoomName().equals(roomName))
+                .map(this::convertToScreeningDto)
                 .collect(Collectors.toList());
     }
 
