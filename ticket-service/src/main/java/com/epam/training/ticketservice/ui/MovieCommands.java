@@ -1,8 +1,8 @@
 package com.epam.training.ticketservice.ui;
 
-import com.epam.training.ticketservice.repository.MovieRepository;
-import com.epam.training.ticketservice.service.MovieService;
-import com.epam.training.ticketservice.service.UserService;
+import com.epam.training.ticketservice.core.movie.persistence.repository.MovieRepository;
+import com.epam.training.ticketservice.core.movie.impl.MovieServiceImpl;
+import com.epam.training.ticketservice.core.user.impl.UserServiceImpl;
 import com.epam.training.ticketservice.ui.valueproviders.MovieValueProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.Availability;
@@ -14,11 +14,11 @@ import org.springframework.shell.standard.ShellOption;
 @ShellComponent
 public class MovieCommands {
 
-    private final MovieService movieService;
-    private final UserService userService;
+    private final MovieServiceImpl movieService;
+    private final UserServiceImpl userService;
 
     @Autowired
-    public MovieCommands(MovieRepository movieRepository, MovieService movieService, UserService userService) {
+    public MovieCommands(MovieRepository movieRepository, MovieServiceImpl movieService, UserServiceImpl userService) {
         this.movieService = movieService;
         this.userService = userService;
     }
@@ -47,8 +47,8 @@ public class MovieCommands {
 
 
     @ShellMethodAvailability({"create movie", "update movie", "delete movie"})
-    public Availability isSignedIn() {
-        return userService.isSignedIn()
+    public Availability isAdmin() {
+        return userService.isAdmin()
                 ? Availability.available()
                 : Availability.unavailable("you have to be signed in as a privileged user.");
     }

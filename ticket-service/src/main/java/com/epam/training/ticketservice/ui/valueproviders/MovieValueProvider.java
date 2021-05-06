@@ -1,7 +1,7 @@
 package com.epam.training.ticketservice.ui.valueproviders;
 
-import com.epam.training.ticketservice.model.Movie;
-import com.epam.training.ticketservice.service.MovieService;
+import com.epam.training.ticketservice.core.movie.persistence.entity.Movie;
+import com.epam.training.ticketservice.core.movie.impl.MovieServiceImpl;
 import org.springframework.core.MethodParameter;
 import org.springframework.shell.CompletionContext;
 import org.springframework.shell.CompletionProposal;
@@ -14,9 +14,9 @@ import java.util.stream.Collectors;
 @Component
 public class MovieValueProvider extends ValueProviderSupport {
 
-    private final MovieService movieService;
+    private final MovieServiceImpl movieService;
 
-    public MovieValueProvider(MovieService movieService) {
+    public MovieValueProvider(MovieServiceImpl movieService) {
         this.movieService = movieService;
     }
 

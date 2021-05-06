@@ -1,7 +1,7 @@
 package com.epam.training.ticketservice.ui;
 
-import com.epam.training.ticketservice.service.RoomService;
-import com.epam.training.ticketservice.service.UserService;
+import com.epam.training.ticketservice.core.room.impl.RoomServiceImpl;
+import com.epam.training.ticketservice.core.user.impl.UserServiceImpl;
 import com.epam.training.ticketservice.ui.valueproviders.RoomValueProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.shell.Availability;
@@ -13,11 +13,11 @@ import org.springframework.shell.standard.ShellOption;
 @ShellComponent
 public class RoomCommands {
 
-    private final RoomService roomService;
-    private final UserService userService;
+    private final RoomServiceImpl roomService;
+    private final UserServiceImpl userService;
 
     @Autowired
-    public RoomCommands(RoomService roomService, UserService userService) {
+    public RoomCommands(RoomServiceImpl roomService, UserServiceImpl userService) {
         this.roomService = roomService;
         this.userService = userService;
     }
@@ -46,8 +46,8 @@ public class RoomCommands {
 
 
     @ShellMethodAvailability({"create room", "update room", "delete room"})
-    public Availability isSignedIn() {
-        return userService.isSignedIn()
+    public Availability isAdmin() {
+        return userService.isAdmin()
                 ? Availability.available()
                 : Availability.unavailable("you have to be signed in as a privileged user.");
     }
