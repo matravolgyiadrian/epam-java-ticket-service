@@ -39,7 +39,7 @@ public class RoomServiceImpl implements RoomService {
     @Override
     public void create(String name, int rows, int columns) {
         if (roomRepository.findById(name).isPresent()) {
-            console.printError("There is already a room named like this.");
+            console.printError("This room is already exists");
         } else {
             roomRepository.save(
                     Room.builder()
@@ -55,7 +55,7 @@ public class RoomServiceImpl implements RoomService {
     @Override
     public void update(String name, int rows, int columns) {
         if (roomRepository.findById(name).isEmpty()) {
-            console.printError("The room doesn't exists.");
+            console.printError("There is no room with name: %s", name);
         } else {
             roomRepository.save(
                     Room.builder()
@@ -75,7 +75,7 @@ public class RoomServiceImpl implements RoomService {
 
             log.debug("Room deleted, with name: {}", name);
         } else {
-            console.printError("The room doesn't exists.");
+            console.printError("The room doesn't exist.");
         }
     }
 
