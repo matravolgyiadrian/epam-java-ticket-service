@@ -103,7 +103,7 @@ public class UserServiceImpl implements UserService {
                 console.print("%s", listAllByLoggedInUser());
             }
         } else {
-            console.printError("Your are not signed in");
+            console.printError("You are not signed in");
         }
     }
 
