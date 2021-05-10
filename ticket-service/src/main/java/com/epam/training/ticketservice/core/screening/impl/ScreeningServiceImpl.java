@@ -47,11 +47,10 @@ public class ScreeningServiceImpl implements ScreeningService {
         if (screeningRepository.findAll().isEmpty()) {
             console.printError("There are no screenings");
         } else {
-            screeningRepository.findAll()
-                    .stream()
-                    .map(this::convertToScreeningDto)
-                    .map(ScreeningDto::toString)
-                    .forEach(console::print);
+            List<Screening> all = screeningRepository.findAll();
+            for (int i = all.size() - 1; i >= 0; i--) {
+                console.print(convertToScreeningDto(all.get(i)).toString());
+            }
         }
     }
 

@@ -75,6 +75,10 @@ public class UserServiceImpl implements UserService {
                 this.loggedInUser = user.getUsername();
                 this.isAdmin.set(isAdmin);
 
+                if (isAdmin) {
+                    console.print("Signed in with privileged account '%s'", loggedInUser);
+                }
+
                 log.debug("Signed in with user '{}' ({})", user.getUsername(), user.getType().toString());
                 break;
             }
@@ -139,7 +143,7 @@ public class UserServiceImpl implements UserService {
         if (bookingRepository.findByUsername(loggedInUser).isEmpty()) {
             return "You have not booked any tickets yet";
         } else {
-            StringBuilder sb = new StringBuilder("Your previous booking are");
+            StringBuilder sb = new StringBuilder("Your previous bookings are");
             bookingRepository.findByUsername(loggedInUser)
                     .forEach(booking -> sb.append("\n").append(booking.toString()));
             return sb.toString();

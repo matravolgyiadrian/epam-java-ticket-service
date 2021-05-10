@@ -13,14 +13,14 @@ public class ConsoleService {
     private final PrintStream out = System.out;
 
     public void print(String msg, String... args) {
-        this.out.print(ANSI_YELLOW);
+        //this.out.print(ANSI_YELLOW);
         this.out.printf(msg, (Object[]) args);
-        this.out.println(ANSI_RESET);
+        this.out.println();
     }
 
     public void printError(String msg, String... args) {
-        this.out.print(ANSI_RED);
+        //this.out.print(ANSI_RED);
         this.out.printf(msg, (Object[]) args);
-        this.out.println(ANSI_RESET);
+        this.out.println();
     }
 }

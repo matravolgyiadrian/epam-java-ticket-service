@@ -17,10 +17,10 @@ public class CustomPromptProvider implements PromptProvider {
     @Override
     public AttributedString getPrompt() {
         if (userService.isSignedIn()) {
-            return new AttributedString("TicketService (connected)>",
+            return new AttributedString("Ticket service (connected)>",
                     AttributedStyle.DEFAULT.foreground(AttributedStyle.GREEN));
         } else {
-            return new AttributedString("TicketService>",
+            return new AttributedString("Ticket service>",
                     AttributedStyle.DEFAULT.foreground(AttributedStyle.GREEN));
         }
     }
