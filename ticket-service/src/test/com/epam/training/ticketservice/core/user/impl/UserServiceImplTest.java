@@ -195,7 +195,7 @@ class UserServiceImplTest {
         underTest.describe();
 
         //Then
-        Mockito.verify(console).print("Signed in with privileged account '%s'", "admin");
+        Mockito.verify(console, Mockito.times(2)).print("Signed in with privileged account '%s'", "admin");
         Mockito.verify(console).print("%s", "You have not booked any tickets yet");
         Mockito.verifyNoMoreInteractions(console);
     }
@@ -229,8 +229,8 @@ class UserServiceImplTest {
         underTest.describe();
 
         //Then
-        Mockito.verify(console).print("Signed in with privileged account '%s'", "admin");
-        Mockito.verify(console).print("%s", "Your previous booking are\n" +
+        Mockito.verify(console, Mockito.times(2)).print("Signed in with privileged account '%s'", "admin");
+        Mockito.verify(console).print("%s", "Your previous bookings are\n" +
                 "Seats (2,3) on Terminator in room Alpha starting at 2021-11-01 12:00 for 1500 HUF");
         Mockito.verifyNoMoreInteractions(console);
     }
@@ -250,7 +250,7 @@ class UserServiceImplTest {
 
         //Then
         Mockito.verify(console).print("Signed in with account '%s'", "alma");
-        Mockito.verify(console).print("%s", "Your previous booking are\n" +
+        Mockito.verify(console).print("%s", "Your previous bookings are\n" +
                 "Seats (2,3) on Terminator in room Alpha starting at 2021-11-01 12:00 for 1500 HUF");
         Mockito.verifyNoMoreInteractions(console);
     }
